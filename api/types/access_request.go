@@ -76,6 +76,8 @@ type AccessRequest interface {
 	GetOriginalRoles() []string
 	// SetThresholds sets the review thresholds (internal use only).
 	SetThresholds([]AccessReviewThreshold)
+	// GetThresholds gets the review thresholds.
+	GetThresholds() []AccessReviewThreshold
 	// SetRoleThresholdMapping sets the rtm (internal use only).
 	SetRoleThresholdMapping(map[string]ThresholdIndexSets)
 	// ApplyReview applies an access review.  The supplied parser must be pre-configured to evaluate
@@ -234,6 +236,11 @@ func (r *AccessRequestV3) getThreshold(tid uint32) (AccessReviewThreshold, error
 // SetThresholds sets the review thresholds.
 func (r *AccessRequestV3) SetThresholds(thresholds []AccessReviewThreshold) {
 	r.Spec.Thresholds = thresholds
+}
+
+// GetThresholds gets the review thresholds.
+func (r *AccessRequestV3) GetThresholds() []AccessReviewThreshold {
+	return r.Spec.Thresholds
 }
 
 // SetRoleThresholdMapping sets the rtm (internal use only).
