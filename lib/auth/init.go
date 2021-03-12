@@ -490,7 +490,7 @@ func Init(cfg InitConfig, opts ...ServerOption) (*Server, error) {
 //
 // For more details, see Section "Auth server initialization"
 // in rfd/0016-dynamic-configuration.md
-func shouldUpdateResource(candidate, stored services.ResourceWithOrigin, getErr error) (bool, error) {
+func shouldUpdateResource(candidate, stored types.ResourceWithOrigin, getErr error) (bool, error) {
 	if getErr != nil {
 		if !trace.IsNotFound(getErr) {
 			return false, getErr

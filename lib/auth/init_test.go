@@ -158,10 +158,10 @@ func TestBadIdentity(t *testing.T) {
 // TestAuthPreference ensures that the act of creating an AuthServer sets
 // the AuthPreference (type and second factor) on the backend.
 func TestAuthPreference(t *testing.T) {
-	ap, err := services.NewAuthPreference(services.AuthPreferenceSpecV2{
+	ap, err := types.NewAuthPreference(types.AuthPreferenceSpecV2{
 		Type:         constants.Local,
 		SecondFactor: constants.SecondFactorU2F,
-		U2F: &services.U2F{
+		U2F: &types.U2F{
 			AppID:  "foo",
 			Facets: []string{"bar", "baz"},
 		},
@@ -190,7 +190,7 @@ func TestAuthPreferenceResetConfigFileToDefaults(t *testing.T) {
 	// Simulate a server with auth preference from config file.
 	var err error
 	conf := setupConfig(t)
-	conf.AuthPreference, err = services.NewAuthPreferenceFromConfigFile(services.AuthPreferenceSpecV2{
+	conf.AuthPreference, err = types.NewAuthPreferenceFromConfigFile(types.AuthPreferenceSpecV2{
 		SecondFactor: constants.SecondFactorOff,
 	})
 	require.NoError(t, err)
@@ -203,11 +203,11 @@ func TestAuthPreferenceResetConfigFileToDefaults(t *testing.T) {
 	storedAuthPref, err := authServer.GetAuthPreference()
 	require.NoError(t, err)
 	require.True(t, storedAuthPref.IsFromConfigFile())
-	defaultSecondFactor := services.DefaultAuthPreference().GetSecondFactor()
+	defaultSecondFactor := types.DefaultAuthPreference().GetSecondFactor()
 	require.NotEqual(t, defaultSecondFactor, storedAuthPref.GetSecondFactor())
 
 	// Reset the auth preference back to default.
-	conf.AuthPreference = services.DefaultAuthPreference()
+	conf.AuthPreference = types.DefaultAuthPreference()
 	authServer, err = Init(conf)
 	require.NoError(t, err)
 	defer authServer.Close()
@@ -226,7 +226,7 @@ func TestAuthPreferenceResetDynamicToConfigFile(t *testing.T) {
 	// Simulate a server with auth preference set dynamically.
 	var err error
 	conf := setupConfig(t)
-	conf.AuthPreference, err = services.NewAuthPreference(services.AuthPreferenceSpecV2{
+	conf.AuthPreference, err = types.NewAuthPreference(types.AuthPreferenceSpecV2{
 		SecondFactor: constants.SecondFactorOff,
 	})
 	require.NoError(t, err)
@@ -243,7 +243,7 @@ func TestAuthPreferenceResetDynamicToConfigFile(t *testing.T) {
 	require.Equal(t, constants.SecondFactorOff, storedAuthPref.GetSecondFactor())
 
 	// Attempt to reset back to default should be a no-op.
-	conf.AuthPreference = services.DefaultAuthPreference()
+	conf.AuthPreference = types.DefaultAuthPreference()
 	authServer, err = Init(conf)
 	require.NoError(t, err)
 	defer authServer.Close()
@@ -256,7 +256,7 @@ func TestAuthPreferenceResetDynamicToConfigFile(t *testing.T) {
 	require.Equal(t, constants.SecondFactorOff, storedAuthPref.GetSecondFactor())
 
 	// Overwriting with a config-file preference should always work.
-	conf.AuthPreference, err = services.NewAuthPreferenceFromConfigFile(services.AuthPreferenceSpecV2{
+	conf.AuthPreference, err = types.NewAuthPreferenceFromConfigFile(types.AuthPreferenceSpecV2{
 		SecondFactor: constants.SecondFactorOTP,
 	})
 	require.NoError(t, err)

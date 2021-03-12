@@ -73,7 +73,7 @@ type ResourceWithOrigin interface {
 	Resource
 	// IsFromConfigFile returns true if the resource originates from config file.
 	IsFromConfigFile() bool
-	// IsFromConfigFile returns true if the resource originates from defaults.
+	// IsFromDefaults returns true if the resource originates from defaults.
 	IsFromDefaults() bool
 }
 
